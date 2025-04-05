@@ -1,0 +1,150 @@
+// Name: Abdulkadir Shamsudin
+// ADM:170284
+
+// Name: Hassan Mohamud
+// ADM:152434
+
+// Name: Abbdalla, Zulekha Omar
+// ADM:171369
+
+
+import java.util.*;
+import java.text.SimpleDateFormat;
+
+class Student {
+    String name;
+    String id;
+    int[][] scores;
+    static final String[] subjects = {"Differential calculus", "OOP", " Accounting", " database", "Web development"};
+
+    Student(String name, String id, int[][] scores) {
+          this.name = name;
+        this.id = id;
+          this.scores = scores;
+    }
+
+
+
+
+
+    double calculatessubjectaverage(int[] scores) {
+        int catAvg = (scores[0] + scores[1] + scores[2]) / 3;
+           return (catAvg * 0.4) + scores[3]; 
+    }
+
+
+
+
+    double calculateOverallAverage() {
+        double total = 0;
+        for (int i = 0; i < scores.length; i++) {
+              total += calculatessubjectaverage(scores[i]);
+        }
+        return total / subjects.length;
+    }
+
+
+
+    String getGrade(double average) {
+         if (average > 70) return "A";
+            if (average >= 60) return "B";
+         if (average >= 50) return "C";
+              if (average >= 40) return "D";
+        return "Fail";
+    }
+
+    String comments(String grade) {
+        switch (grade) {
+             case "A": return "Excellent Work! keep grinding";
+               case "B": return "You have potential to be great, don't waste it!";
+            case "C": return "You can do better!";
+                case "D": return "pull up your socks";
+            default: return "Stop joking buana!";
+        }
+    }
+
+    void displayReportCard() {
+           System.out.println("\n===========");
+        System.out.println("      REPORT CARD");
+       System.out.println("=================");
+         System.out.println("Student Name: " + name);
+          System.out.println("ID Number: " + id);
+         System.out.println("*****************");
+        
+        for (int i = 0; i < subjects.length; i++) {
+            double subjectaverage = calculatessubjectaverage(scores[i]);
+            String grade = getGrade(subjectaverage);
+            System.out.println(subjects[i] + " - " + subjectaverage + " (Grade: " + grade + ")");
+        }
+        
+        double overallaverage = calculateOverallAverage();
+        String finalGrade = getGrade(overallaverage);
+        String recommendation = comments(finalGrade);
+
+           System.out.println("\nOverall Average: " + overallaverage);
+         System.out.println("Final Grade: " + finalGrade);
+           System.out.println("Recommendation: " + recommendation);
+         System.out.println("Report Date: " + new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+          System.out.println("===================\n");
+    }
+}
+
+public class examprocessingSystem {
+    static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        int numstudents = numbaerofstudents();
+        List<Student> students = new ArrayList<>();
+
+        for (int i = 0; i < numstudents; i++) {
+            students.add(readStudentData(i + 1));
+        }
+
+        for (Student student : students) {
+            student.displayReportCard();
+        }
+
+        scanner.close();
+    }
+
+    static int numbaerofstudents() {
+        int num;
+        do {
+            System.out.print("Enter a minimum of 10 student cerdentials: ");
+            num = scanner.nextInt();
+            scanner.nextLine();
+        } while (num < 10);
+        return num;
+    }
+
+    static Student readStudentData(int studentNumber) {
+        System.out.println("\nEnter details for student " + studentNumber + ":");
+        System.out.print("Name: ");
+        String name = scanner.nextLine();
+        System.out.print("ID: ");
+        String id = scanner.nextLine();
+
+           int[][] scores = new int[Student.subjects.length][4]; // 5 subjects, 4 assessments each
+
+        for (int i = 0; i < Student.subjects.length; i++) {
+               System.out.println("Enter scores for " + Student.subjects[i] + ":");
+             scores[i] = readScores();
+        }
+
+        return new Student(name, id, scores);
+    }
+
+    static int[] readScores() {
+        int[] marks = new int[4];
+            System.out.print("CAT 1: ");
+        marks[0] = scanner.nextInt();
+          System.out.print("CAT 2: ");
+        marks[1] = scanner.nextInt();
+         System.out.print("Project: ");
+          marks[2] = scanner.nextInt();
+    System.out.print("Main Exam: ");
+         marks[3] = scanner.nextInt();
+           scanner.nextLine(); 
+          return marks;
+    }
+}
